@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Snova Dark Theme - Cyberpunk E-commerce */
+    --background: 240 8% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 6% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 8% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Neon Blue Primary */
+    --primary: 190 100% 50%;
+    --primary-foreground: 240 8% 4%;
+
+    /* Neon Green Secondary */
+    --secondary: 160 100% 50%;
+    --secondary-foreground: 240 8% 4%;
+
+    --muted: 240 6% 12%;
+    --muted-foreground: 0 0% 60%;
+
+    /* Neon Purple Accent */
+    --accent: 280 100% 56%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 6% 16%;
+    --input: 240 6% 12%;
+    --ring: 190 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Neon Glow Effects */
+    --glow-blue: 190 100% 50%;
+    --glow-green: 160 100% 50%;
+    --glow-purple: 280 100% 56%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(190 100% 50%), hsl(280 100% 56%));
+    --gradient-secondary: linear-gradient(135deg, hsl(160 100% 50%), hsl(190 100% 50%));
+    --gradient-dark: linear-gradient(180deg, hsl(240 8% 4%), hsl(240 6% 8%));
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Neon Glow Utilities */
+  .glow-blue {
+    box-shadow: 0 0 20px hsl(var(--glow-blue) / 0.5), 0 0 40px hsl(var(--glow-blue) / 0.3);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 20px hsl(var(--glow-green) / 0.5), 0 0 40px hsl(var(--glow-green) / 0.3);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px hsl(var(--glow-purple) / 0.5), 0 0 40px hsl(var(--glow-purple) / 0.3);
+  }
+
+  .glow-text-blue {
+    text-shadow: 0 0 10px hsl(var(--glow-blue) / 0.8), 0 0 20px hsl(var(--glow-blue) / 0.6);
+  }
+
+  .glow-text-green {
+    text-shadow: 0 0 10px hsl(var(--glow-green) / 0.8), 0 0 20px hsl(var(--glow-green) / 0.6);
+  }
+
+  .glow-text-purple {
+    text-shadow: 0 0 10px hsl(var(--glow-purple) / 0.8), 0 0 20px hsl(var(--glow-purple) / 0.6);
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Smooth Transitions */
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
