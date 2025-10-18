@@ -1,9 +1,38 @@
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import Card from '@/components/Card';
 
+const registerSchema = z
+  .object({
+    fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
+    email: z.string().email({ message: 'Please enter a valid email address.' }),
+    password: z.string().min(8, { message: 'Password must be at least 8 characters.' }),
+    confirmPassword: z.string(),
+    agreedToTerms: z.boolean().refine((val) => val === true, {
+      message: 'You must agree to the terms and policy.',
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'], // path of error
+  });
+
+type RegisterFormValues = z.infer<typeof registerSchema>;
+
 const Register = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = (data: RegisterFormValues) => {
+    console.log('Form submitted!', data);
+    // Here you would typically handle the API call for registration
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4">
       <Card glow className="w-full max-w-md">
@@ -15,43 +44,56 @@ const Register = () => {
           <p className="text-muted-foreground">Join Snova Digital Market</p>
         </div>
 
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <InputField
             label="Full Name"
             type="text"
             placeholder="John Doe"
+            {...register('fullName')}
+            error={errors.fullName?.message}
           />
           <InputField
             label="Email"
             type="email"
             placeholder="your@email.com"
+            {...register('email')}
+            error={errors.email?.message}
           />
           <InputField
             label="Password"
             type="password"
             placeholder="••••••••"
+            {...register('password')}
+            error={errors.password?.message}
           />
           <InputField
             label="Confirm Password"
             type="password"
             placeholder="••••••••"
+            {...register('confirmPassword')}
+            error={errors.confirmPassword?.message}
           />
 
           <div className="flex items-start text-sm">
-            <input type="checkbox" className="mr-2 mt-1" />
-            <span className="text-muted-foreground">
-              I agree to the{' '}
-              <Link to="/terms" className="text-primary hover:underline">
-                Terms of Service
-              </Link>{' '}
-              and{' '}
-              <Link to="/privacy" className="text-primary hover:underline">
-                Privacy Policy
-              </Link>
-            </span>
+            <div className="flex items-center h-5">
+              <input id="terms" type="checkbox" {...register('agreedToTerms')} className="mr-2" />
+            </div>
+            <div className="ml-2 text-sm">
+              <label htmlFor="terms" className="text-muted-foreground">
+                I agree to the{' '}
+                <Link to="/terms" className="text-primary hover:underline">
+                  Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link to="/privacy" className="text-primary hover:underline">
+                  Privacy Policy
+                </Link>
+              </label>
+              {errors.agreedToTerms && <p className="text-destructive text-xs mt-1">{errors.agreedToTerms.message}</p>}
+            </div>
           </div>
 
-          <Button variant="primary" size="lg" className="w-full" glow>
+          <Button type="submit" variant="primary" size="lg" className="w-full" glow>
             Create Account
           </Button>
         </form>
